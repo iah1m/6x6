@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="Joc Tabla Inmultirii">
+	<meta name="keywords" content="HTML, CSS, JavaScript">
+	<meta name="author" content="Flanja Cosmin-Mihai">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>6x6</title>
+	<style>
+		html,body {margin:0; padding:0; width:100vw; height:100vh; background-color:black; color:white;}
+		#mainWrapper {margin:0; padding:0; width:95vw; height:95vh;}
+		#contentWrapper {width:60vw;height:30vh;margin:5px; padding:5px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);display:inline; font-size:5vw;}
+		#contentWrapper div {display:inline;}
+		#resultInput {width:10vw;padding:4px;box-sizing: border-box;border: 1px solid #ccc; border-radius: 4px; font-size:5vw;display: inline-block;margin:0;}
+		#submitButton {font-size:2vw; padding:6px; border: none; border-radius: 4px; cursor:pointer;display: inline-block; }
+		#resultVerdictWrapper{width:60vw;height:30vh;margin:5px; padding:5px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);display:inline; font-size:5vw;display:none;}
+		#counterWrapper{width:60vw;height:10vh;position: absolute; top: 10%; left: 50%; transform: translate(-50%, -50%);display:inline; font-size:3vw; color:white;}
+		span{padding:0;margin:0);
+	</style>
+	
+	
+</head>
+<body>
+
+<div id="mainWrapper">
+<div id="counterWrapper">
+
+Nu a fost dat niciun raspuns.
+
+</div><!-- end of counter wrapper -->
+
+<div id="contentWrapper"> <!-- holds the main game, will disappear for 3 seconds after a response is given,then reappear-->
+
+<div id="firstOperandWrapper">
+
+	6
+
+
+</div><!-- end of first operand wrapper	-->
+
+<div id="operatorWrapper">
+
+	*
+
+</div> <!-- end of operator wrapper	-->
+
+<div id="secondOperandWrapper">
+
+
+	6
+
+
+</div> <!-- end of second operand wrapper -->
+
+<div id="equalsToWrapper">
+
+	=
+
+</div> <!-- end of equal sign wrapper	-->
+
+<div id="resultWrapper">
+
+
+	<input type="text" id="resultInput" name="resInput" placeholder="" size="3" maxlength="3">
+	
+	<button type="button" id="submitButton" value=" ">
+		Trimite raspunsul!
+	</button>
+	
+
+</div> <!-- end of result wrapper -->
+
+
+
+</div><!-- end of content wrapper	-->
+
+<div id="resultVerdictWrapper">
+
+	
+
+</div> <!-- end of result verdict swrapper	-->
+
+
+
+</div> <!-- end of main wrapper	-->
+
+
+
+<script>
+
+window.addEventListener("load",loadListeners);
+
+let correct_answer_counter=0;
+let wrong_answer_counter=0;
+
+function loadListeners()
+{
+	// add some listeners for enter in the input screen or pressing the button
+	document.getElementById("submitButton").addEventListener("click",verifyResult);
+	document.getElementById("resultInput").addEventListener("keypress",function(event)
+		{
+			if(event.key==="Enter")
+			{
+			event.preventDefault();
+			document.getElementById("submitButton").click();
+			}
+		});
+}
+
+function loadRandomNumber()
+{
+let max=9;
+let min=1;
+return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+function verifyResult()
+{
+	let user_response=document.getElementById("resultInput").value;
+	let actual_result=document.getElementById("firstOperandWrapper").innerHTML*document.getElementById("secondOperandWrapper").innerHTML;
+	document.getElementById("contentWrapper").style.display="none"; // hide content
+	document.getElementById("counterWrapper").style.display="none"; // hide counter
+	document.getElementById("resultVerdictWrapper").style.display="inline-block"; // display the result verdict wrapper
+	if(user_response==actual_result)
+		{
+			document.getElementById("resultVerdictWrapper").style.color="green"; // correct response so colour is green
+			document.getElementById("resultVerdictWrapper").innerHTML="Raspuns corect";
+			correct_answer_counter++;
+			var audio = new Audio('https://github.com/iah1m/6x6/blob/main/raspunscorect.mp3');
+			audio.volume=0.2;
+			audio.play();
+			setTimeout(returnToNormalDisplay,5000);
+		}
+	else
+		{
+			document.getElementById("resultVerdictWrapper").style.color="white"; // correct response so colour is green
+			document.getElementById("resultVerdictWrapper").innerHTML="Raspuns gresit";
+			document.getElementById("resultVerdictWrapper").innerHTML+="<br>";
+			document.getElementById("resultVerdictWrapper").innerHTML+="Raspunsul corect era:";
+			document.getElementById("resultVerdictWrapper").innerHTML+="<span style='color:red'>"+actual_result+"</span>"
+			wrong_answer_counter++;
+			var audio = new Audio('https://github.com/iah1m/6x6/blob/main/raspunsgresit.mp3');
+			audio.volume=0.2;
+			audio.play();
+			setTimeout(returnToNormalDisplay,5000);
+		}
+}
+
+function returnToNormalDisplay()
+{
+	document.getElementById("contentWrapper").style.display="inline-block"; // restore content
+	document.getElementById("resultVerdictWrapper").style.display="none"; // hide the result verdict wrapper
+	document.getElementById("firstOperandWrapper").innerHTML=loadRandomNumber(); // reload the numbers
+	document.getElementById("secondOperandWrapper").innerHTML=loadRandomNumber();
+	document.getElementById("resultInput").value=""; // clear previous input
+	document.getElementById("counterWrapper").style.display="inline"; // display the counter
+	document.getElementById("counterWrapper").innerHTML="Raspunsuri corecte: <span style='color:green'>"+correct_answer_counter+"</span>"// update the correct/wrong counters
+	document.getElementById("counterWrapper").innerHTML+="<br>";
+	document.getElementById("counterWrapper").innerHTML+="Raspunsuri gresite: <span style='color:red'>"+wrong_answer_counter+"</span>"
+}
+	document.getElementById("firstOperandWrapper").innerHTML=loadRandomNumber();
+	document.getElementById("secondOperandWrapper").innerHTML=loadRandomNumber();
+	
+</script>
+
+</body>
+</html>
